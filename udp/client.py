@@ -55,11 +55,12 @@ def send_quick_packet():
     quick_packet1 = PacketQuick(packet1, bytearray(b'\x00\x00'), datetime.now(), bytearray(b'\x00\x08'),
                                 bytearray(b'\x0A\x02\x01\xCA'), bytearray(b'\x00\x00'))
     message1 = quick_packet1.packet.flag + quick_packet1.packet.id + quick_packet1.f_num + \
-               quick_packet1.execute_time.strftime("%H:%M:%S.%f-%b%d%Y").encode('ascii') + \
+               quick_packet1.execute_time.strftime("%H:%M:%S.%f-%b%d%Y").encode("utf-8") + \
                quick_packet1.length + quick_packet1.can_frame + quick_packet1.crc
     # message1.append(int.from_bytes(quick_packet1.packet.id, byteorder='big'))
     message1 = bytes(message1)
     print(message1)
+    sock.sendto(message1, (UDP_IP, UDP_PORT))
 
 
 def send_normalpacket():
@@ -76,7 +77,7 @@ print("UDP target IP:", UDP_IP)
 print("UDP target port:", UDP_PORT)
 print("message:", MESSAGE)
 print(int("a0", 16))
-# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # sock.sendto(bytes(MESSAGE, "utf-8"), (UDP_IP, UDP_PORT))
 # sock.sendto(bytearray([0x00, 0x01, 0xFF, 0xFF, 0xFF]), (UDP_IP, UDP_PORT))
 # sock.sendto(bytearray([0x00, 0x01, 0xFF, 0xFF, 0xFF]) + bytes(MESSAGE, "utf-8")+ bytearray([0xFF]),(UDP_IP, UDP_PORT))
