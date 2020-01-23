@@ -78,4 +78,4 @@ sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT))
 sock.sendto(bytes(quick_packet.packet.flag, "utf-8") + bytes(quick_packet.packet.id) + bytes(quick_packet.f_num) +
             bytes(quick_packet.execute_time.strftime("%H:%M:%S.%f-%b%d%Y"), "utf-8") + bytes(quick_packet.length) +
             bytes(quick_packet.can_frame, "utf-8") + bytes(quick_packet.crc), (UDP_IP, UDP_PORT))
-print("From MAC  ")
+print("From MAC     ")
