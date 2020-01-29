@@ -2,6 +2,9 @@ from typing import NamedTuple
 import socket
 from datetime import datetime
 from enum import Enum
+from PyCRC.CRC16 import CRC16
+from PyCRC.CRCCCITT import CRCCCITT
+import zlib
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 5005
@@ -57,14 +60,22 @@ def send_quick_packet():
     message1 = quick_packet1.packet.flag + quick_packet1.packet.id + quick_packet1.f_num + \
                quick_packet1.execute_time.strftime("%H:%M:%S.%f-%b%d%Y").encode("utf-8") + \
                quick_packet1.length + quick_packet1.can_frame + quick_packet1.crc
-    # message1.append(int.from_bytes(quick_packet1.packet.id, byteorder='big'))
+    data = quick_packet1.packet.flag + quick_packet1.packet.id + quick_packet1.f_num + \
+           quick_packet1.execute_time.strftime("%H:%M:%S.%f-%b%d%Y").encode("utf-8") + \
+           quick_packet1.length + quick_packet1.can_frame
+    checksum = zlib.crc32(data)
+    print(checksum)
+    data = data + checksum.to_bytes(9, byteorder='little')
+    data = bytes(data)
+    print(data)
     message1 = bytes(message1)
     print(message1)
-    sock.sendto(message1, (UDP_IP, UDP_PORT))
+    sock.sendto(data, (UDP_IP, UDP_PORT))
 
 
 def send_normalpacket():
     return
+
 
 
 # packet_type = PacketType(2)
