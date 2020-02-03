@@ -2,11 +2,10 @@ from typing import NamedTuple
 import socket
 from datetime import datetime
 from enum import Enum
-from PyCRC.CRC16 import CRC16
-from PyCRC.CRCCCITT import CRCCCITT
 import zlib
 
-UDP_IP = "127.0.0.1"
+#UDP_IP = "127.0.0.1"
+UDP_IP = "192.168.0.2"
 UDP_PORT = 5005
 
 
@@ -56,7 +55,7 @@ def send_quick_packet():
     packet_type1 = PacketType(2)
     packet1 = Packet(packet_type1, bytearray(b'\x00\xFF'), bytearray(b'\x00\x01'))
     quick_packet1 = PacketQuick(packet1, bytearray(b'\x00\x00'), datetime.now(), bytearray(b'\x00\x08'),
-                                bytearray(b'\x0A\x02\x01\xCA'), bytearray(b'\x00\x00'))
+                                bytearray(b'\xCA\x08\x01\x02\x03\x04\x05\x06\x07\x08'), bytearray(b'\x00\x00'))
     message1 = quick_packet1.packet.flag + quick_packet1.packet.id + quick_packet1.f_num + \
                quick_packet1.execute_time.strftime("%H:%M:%S.%f-%b%d%Y").encode("utf-8") + \
                quick_packet1.length + quick_packet1.can_frame + quick_packet1.crc
