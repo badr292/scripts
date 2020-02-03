@@ -2,8 +2,9 @@ import socket
 import ntcan
 import util
 
-#UDP_IP = "127.0.0.1"
-UDP_IP = "192.168.0.4"
+# UDP_IP = "127.0.0.1"
+
+UDP_IP = "192.168.0.2"
 UDP_PORT = 5005
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
@@ -49,7 +50,7 @@ while True:
     data, addr = sock.recvfrom(1024)
     # data,addr = server_socket.recvfrom(1024)
     hunt_flag = 0
-    while data[hunt_flag] != 0 and data[hunt_flag+1] != 255 and len(data) - 1 != hunt_flag:
+    while data[hunt_flag] != 0 and data[hunt_flag + 1] != 255 and len(data) - 1 != hunt_flag:
         print(data[hunt_flag])
         hunt_flag += 1
 
