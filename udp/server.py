@@ -6,6 +6,8 @@ import util
 
 UDP_IP = "192.168.0.2"
 UDP_PORT = 5005
+UDP_IP_client = "192.168.0.4"
+UDP_PORT_client = 5005
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 hunt_flag = 0
@@ -50,15 +52,21 @@ while True:
     data, addr = sock.recvfrom(1024)
     # data,addr = server_socket.recvfrom(1024)
     hunt_flag = 0
-    while data[hunt_flag] != 0 and data[hunt_flag + 1] != 255 and len(data) - 1 != hunt_flag:
+    while data[hunt_flag] != 0 or data[hunt_flag + 1] != 255:
         print(data[hunt_flag])
         hunt_flag += 1
+        if hunt_flag == (len(data)-1):
+            break;
 
     if hunt_flag == len(data) - 1:
         continue
 
     cmsg2.canWriteByte(cif2, data[33], data[34], data[35], data[36], data[37], data[38], data[39], data[40], data[41],
                        data[42])
+    ack = bytearray([0x00, 0xAC, data[2], data[3]])
+    print(ack)
+    ack = bytes(ack)
+    sock.sendto(ack, (UDP_IP_client, UDP_PORT_client))
     nOb = 0
     # def utf8len(data):
     nOb = len(data)
